@@ -1,0 +1,22 @@
+{% extends 'mainapp/base_index.html' %} {% load static %} 
+{% block extra_js %}
+<script></script>
+{% endblock extra_js %} {% block extra_css %} {% endblock extra_css %} 
+{% block content %}
+
+<!-- Display a payment form -->
+<form id="payment-form">
+  <div id="link-authentication-element">
+    <!--Stripe.js injects the Link Authentication Element-->
+  </div>
+  <div id="payment-element">
+    <!--Stripe.js injects the Payment Element-->
+  </div>
+  <button class="btn btn-primary mb-4" id="submit">
+    <div class="spinner hidden" id="spinner"></div>
+    <span id="button-text">支払う</span>
+  </button>
+  <div id="payment-message" class="hidden"></div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'mainapp/base_index.html' %} {%block content%}{% load static %}
+<div class="page-top"></div>
+
+
+<main class="container">
+
+  <!--Contact section-->
+  <section id="contact" class="bg-light mb-4">
+    <h1 class="page-title">お問い合わせページ</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto text-center">
+          <h6 class="theme">CONTACT</h6>
+          <h1>Get In Touch</h1>
+          <p>////////////////////</p>
+        </div>
+      </div>
+      <form action="" class="row g-3 justify-content-center">
+        {% csrf_token %}
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Full Name">
+        </div>
+        <div class="col-md-5">
+          <input type="email" class="form-control" placeholder="Enter Email">
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="Enter Subject">
+        </div>
+        <div class="col-md-10">
+          <textarea rows="5" class="form-control" placeholder="Enter Message"></textarea>
+        </div>
+        <div class="col-md-10 d-grid">
+          <button class="btn btn-info">Contact</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  {% include 'mainapp/snippets/sidebar.html' %}
+
+  </div>
+</main>
+
+{%endblock%}

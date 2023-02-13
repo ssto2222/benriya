@@ -1,0 +1,107 @@
+{% extends '../../mainapp/base_index.html' %}{% load static %}
+
+{% block content%}
+<div class="page-top"></div>
+<h1 class="page-title">買い物かご</h1>
+<div class="container mt-3">
+
+    {% for item in basket %}
+    {% with product=item.product %}
+    <div data-index={{product.id}} class="row mb-4 product-item">
+        <div class="team-member card-effect text-center">
+            <img src="{{product.image.url}}" alt="Responsice image" class="img-fluid">
+            <h5 class="mt-2"><a href="{{ product.get_absolute_url }}"
+                    class="text-dark text-decoration-none">{{product.title}}</a></h5>
+            <div class="border">
+                <div class="col border-bottom">
+                    <div class="row p-3">
+                        <div class="col-6 text-end">
+                            <span class="h6 fw-bold">¥{{product.price}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row p-3">
+                        <div class="col-12">
+                            <label for="select">Qty</label>
+                            <select id="select{{product.id}}">
+                                <option selected>{{item.qty}}</option>
+                                <option value="">1</option>
+                                <option value="">2</option>
+                                <option value="">3</option>
+                                <option value="">4</option>
+                            </select>
+                            <button type="button" id="update-button" data-index="{{product.id}}"
+                                class="btn btn-outline-secondary btn-sm update-button">更新</button>
+                            <button type="button" id="delete-button" data-index="{{product.id}}"
+                                class="btn btn-outline-danger btn-sm delete-button">削除</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+
+    <div class="col-12 text-end">
+        <div class="h6 fw-bold">お支払い額　合計：¥<div id="subtotal" class="d-inline-flex">{{basket.get_total_price}}</div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    $(document).on('click', '.delete-button', function (e) {
+        e.preventDefault();
+        let prodid = $(this).data('index');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "basket:basket_delete" %}',
+            data: {
+                productid: $(this).data('index'),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action: 'post'
+            },
+            success: function (json) {
+                $('.product-item[data-index="' + prodid + '"]').remove();
+                document.getElementById("subtotal").innerHTML = json.subtotal
+                document.getElementById("basket-qty").innerHTML = json.qty
+            },
+            error: function (xhr, errmsg, err) { }
+        });
+
+
+    })
+
+    $(document).on('click', '.update-button', function (e) {
+        e.preventDefault();
+        let prodid = $(this).data('index');
+        console.log(prodid)
+        $.ajax({
+            type: 'POST',
+            url: '{% url "basket:basket_update" %}',
+            data: {
+                productid: $(this).data('index'),
+                productqty: $('#select' + prodid + ' option:selected').text(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action: 'post'
+            },
+            success: function (json) {
+                console.log('update op succeeded')
+                document.getElementById('basket-qty').innerHTML = json.qty
+                document.getElementById('subtotal').innerHTML = json.subtotal
+            },
+            error: function (xhr, errmsg, err) { }
+        });
+
+
+    })
+
+
+</script>
+
+{%endblock%}

@@ -45,7 +45,7 @@ else:
     except:
         print('no yaml files')
              
-
+SECRET_KEY = os.environ['SECRET_KEY']
 #stripe設定
 STRIPE_SECRET_KEY=os.environ['STRIPE_SECRET_KEY']
 STRIPE_PUBLISHED_KEY=os.environ['STRIPE_PUBLISHED_KEY']
@@ -210,8 +210,7 @@ try:
  from .local_settings import *
 except ImportError:
  pass
-if not DEBUG:
- SECRET_KEY = os.environ('SECRET_KEY') #削除したSECRET_KEYをコピペします
+
 
 import django_heroku
 django_heroku.settings(locals())

@@ -3,3 +3,4 @@ secrets/
 .DS_STORE
 local_settings.py
 migrations/
+db.*

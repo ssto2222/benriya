@@ -26,6 +26,8 @@ from mainapp.forms import (PwdResetConfirmForm, PwdResetForm)
 
 name='mainapp'
 
+handler500 = views.my_customized_server_error
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index),

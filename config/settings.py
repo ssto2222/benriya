@@ -21,9 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
 
 if DEBUG == True:
     import yaml
@@ -38,9 +38,12 @@ else:
         objs = yaml.safe_load(f)
         for obj in objs['env_variables']:
              os.environ[obj] = objs['env_variables'][obj]
+             
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+#stripe設定
+STRIPE_SECRET_KEY=os.environ['STRIPE_SECRET_KEY']
+STRIPE_PUBLISHED_KEY=os.environ['STRIPE_PUBLISHED_KEY']
+
 
 # Application definition
 
@@ -61,6 +64,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,12 +102,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR + '/db.sqlite3',
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'name',
+        'USER': 'user',
+        'PASSWORD': '',
+        'HOST': 'host',
+        'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -128,14 +145,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'ja'
+TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -143,9 +156,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -176,3 +191,21 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
+
+#Heroku database
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=600,
+ssl_require=True)
+DATABASES['default'].update(db_from_env)
+try:
+ from .local_settings import *
+except ImportError:
+ pass
+if not DEBUG:
+ SECRET_KEY = os.environ('SECRET_KEY') #削除したSECRET_KEYをコピペします
+
+import django_heroku
+django_heroku.settings(locals())

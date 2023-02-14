@@ -26,18 +26,24 @@ DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
 
 if DEBUG == True:
-    import yaml
-    with open(os.path.join(BASE_DIR,'secrets','secret_dev.yaml')) as f:
-        objs = yaml.safe_load(f)
-        for obj in objs:
-             os.environ[obj] = objs[obj]
+    try:
+        import yaml
+        with open(os.path.join(BASE_DIR,'secrets','secret_dev.yaml')) as f:
+            objs = yaml.safe_load(f)
+            for obj in objs:
+                os.environ[obj] = objs[obj]
+    except:
+        print('no yaml file')
 
 else:
-    import yaml
-    with open(os.path.join(BASE_DIR,'secrets','secret.yaml')) as f:
-        objs = yaml.safe_load(f)
-        for obj in objs['env_variables']:
-             os.environ[obj] = objs['env_variables'][obj]
+    try:
+        import yaml
+        with open(os.path.join(BASE_DIR,'secrets','secret.yaml')) as f:
+            objs = yaml.safe_load(f)
+            for obj in objs['env_variables']:
+                os.environ[obj] = objs['env_variables'][obj]
+    except:
+        print('no yaml files')
              
 
 #stripe設定

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1' ,'13.208.88.142']
 
 if DEBUG == True:
     try:
@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livereload',
+#    'livereload',
     'django.contrib.staticfiles',
     'mainapp',
     'blog',
@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
+   # 'livereload.middleware.LiveReloadScript',
 ]
 
 LIVERELOAD_PORT = '8080'
@@ -108,25 +108,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-#if not DEBUG:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR + '/db.sqlite3',
+        }
     }
-}
 
-# else:
-#     DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'name',
-#         'USER': 'user',
-#         'PASSWORD': '',
-#         'HOST': 'host',
-#         'PORT': '',
-#         }
-#     }
+else:
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tuttofare',
+        'USER': 'admin',
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': 'localhost',
+        'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -162,7 +162,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+STATIC_ROOT = '/var/www/app/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
@@ -197,20 +198,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-
-
-#Heroku database
-import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
-db_from_env = dj_database_url.config(conn_max_age=600,
-ssl_require=True)
-DATABASES['default'].update(db_from_env)
-try:
- from .local_settings import *
-except ImportError:
- pass
-
-
-import django_heroku
-django_heroku.settings(locals())

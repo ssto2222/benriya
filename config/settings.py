@@ -23,27 +23,27 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
-if DEBUG == True:
-    try:
-        import yaml
-        with open(os.path.join(BASE_DIR,'secrets','secret_dev.yaml')) as f:
-            objs = yaml.safe_load(f)
-            for obj in objs:
-                os.environ[obj] = objs[obj]
-    except:
-        print('no yaml file')
+# if DEBUG == True:
+#     try:
+#         import yaml
+#         with open(os.path.join(BASE_DIR,'secrets','secret_dev.yaml')) as f:
+#             objs = yaml.safe_load(f)
+#             for obj in objs:
+#                 os.environ[obj] = objs[obj]
+#     except:
+#         print('no yaml file')
 
-else:
-    try:
-        import yaml
-        with open(os.path.join(BASE_DIR,'secrets','secret.yaml')) as f:
-            objs = yaml.safe_load(f)
-            for obj in objs['env_variables']:
-                os.environ[obj] = objs['env_variables'][obj]
-    except:
-        print('no yaml files')
+# else:
+#     try:
+#         import yaml
+#         with open(os.path.join(BASE_DIR,'secrets','secret.yaml')) as f:
+#             objs = yaml.safe_load(f)
+#             for obj in objs['env_variables']:
+#                 os.environ[obj] = objs['env_variables'][obj]
+#     except:
+#         print('no yaml files')
              
 SECRET_KEY = os.environ['SECRET_KEY']
 #stripe設定
@@ -70,7 +70,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+   # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

@@ -1,0 +1,6 @@
+Django
+gunicorn
+psycopg2
+pyyaml
+stripe
+six

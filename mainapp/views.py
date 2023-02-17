@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from .tokens import account_activation_token
-from .models.account_models import User
+from .models.user_models import User
 from mainapp.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

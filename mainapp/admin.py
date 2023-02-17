@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from mainapp.models.account_models import User
+from mainapp.models.user_models import User
 from mainapp.models.profile_models import Profile
 from django.contrib.auth.models import Group
 from mainapp.forms import UserCreationForm

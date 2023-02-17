@@ -1,2 +1,2 @@
-from .account_models import User
+from .user_models import User
 from .profile_models import Profile

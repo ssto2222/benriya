@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+from dotenv import load_dotenv
+
+from dj_database_url import parse as dburl
+import dj_database_url
 # from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # if DEBUG == True:
 #     try:
@@ -45,11 +49,16 @@ ALLOWED_HOSTS = []
 #     except:
 #         print('no yaml files')
              
+# SECRET_KEY = os.environ['SECRET_KEY']
+# #stripe設定
+# STRIPE_SECRET_KEY=os.environ['STRIPE_SECRET_KEY']
+# STRIPE_PUBLISHED_KEY=os.environ['STRIPE_PUBLISHED_KEY']
+
+load_dotenv()
 SECRET_KEY = os.environ['SECRET_KEY']
 #stripe設定
 STRIPE_SECRET_KEY=os.environ['STRIPE_SECRET_KEY']
 STRIPE_PUBLISHED_KEY=os.environ['STRIPE_PUBLISHED_KEY']
-
 
 # Application definition
 
@@ -70,7 +79,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-   # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,6 +92,8 @@ MIDDLEWARE = [
 LIVERELOAD_PORT = '8080'
 
 ROOT_URLCONF = 'config.urls'
+
+AUTH_USER_MODEL = 'mainapp.User'
 
 TEMPLATES = [
     {
@@ -108,25 +119,53 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR + '/db.sqlite3',
-        }
+# default_dburl = "sqlite:///" + os.path.join(BASE_DIR,"db.sqlite3")
+
+# DATABASES = {
+#     'default': dj_database_url.config("DATABASE_URL", default=default_dburl),
+    
+        # {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': BASE_DIR + '/db.sqlite3',
+        # }
+        #config("DATABASE_URL", default=default_dburl, cast=dburl),
+# }
+
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+DATABASES = {
+    'default': dj_database_url.config(default='postgresql://postgres:postgres@localhost:5432/mysite',conn_max_age=600)
     }
 
-else:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tuttofare',
-        'USER': 'admin',
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': 'localhost',
-        'PORT': '',
-        }
-    }
+
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SUPERUSER_NAME = os.environ["SUPERUSER_NAME"]
+SUPERUSER_EMAIL = os.environ["SUPERUSER_EMAIL"]
+SUPERUSER_PASSWORD = os.environ["SUPERUSER_PASSWORD"]
+
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR + '/db.sqlite3',
+#         }
+#     }
+
+# else:
+#     DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'tuttofare',
+#         'USER': 'admin',
+#         'PASSWORD': os.environ['DATABASE_PASSWORD'],
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         }
+#     }
 
 
 # Password validation
@@ -162,11 +201,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
+   os.path.join(BASE_DIR,'static')
 ]
+
+# Following settings only make sense on production and may break development environments.
+if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_URL = '/media/'

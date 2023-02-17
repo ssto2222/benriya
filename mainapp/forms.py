@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import (PasswordResetForm,SetPasswordForm)
 from django.contrib.auth import get_user_model
 from .models.profile_models import Profile
-from .models.account_models import User
+from .models.user_models import User
 
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField()

@@ -4,6 +4,9 @@ from blog.models import Article
 from django.core.paginator import Paginator
 # Create your views here.
 
+
+
+
 def index(request):
     objs = Article.objects.all()
     paginator = Paginator(objs, 2)

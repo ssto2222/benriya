@@ -1,6 +1,11 @@
 Django
 gunicorn
-psycopg2
+psycopg2-binary
 pyyaml
+jsonify
 stripe
 six
+dj_database_url
+decouple
+python-dotenv
+pillow

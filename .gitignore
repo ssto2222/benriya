@@ -4,3 +4,4 @@ secrets/
 local_settings.py
 migrations/
 .env
+db.*

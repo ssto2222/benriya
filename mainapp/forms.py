@@ -31,7 +31,7 @@ class ProfileForm(forms.ModelForm):
             'prefecture',
             'city',
             'address1',
-            'address2',
+            
             
         )
         
@@ -45,15 +45,15 @@ class PwdResetForm(PasswordResetForm):
         u = User.objects.filter(email=email)
         if not u:
             raise forms.ValidationError(
-                'Unfortunatley we can not find that email address')
+                'そのE-mailアドレスは登録されていません。')
         return email
 
 
 class PwdResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(
-        label='New password', widget=forms.PasswordInput(
+        label='新しいパスワード', widget=forms.PasswordInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'New Password', 'id': 'form-newpass'}))
     new_password2 = forms.CharField(
-        label='Repeat password', widget=forms.PasswordInput(
+        label='もう一度入力してください。', widget=forms.PasswordInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'New Password', 'id': 'form-new-pass2'}))
         

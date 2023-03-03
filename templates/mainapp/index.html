@@ -2,6 +2,12 @@
 <!-- Hero section-->
 <div class="hero vh-100 d-flex align-items-center" id="home">
   <div class="container">
+    {% for message in messages %}
+    <div {% if message.tags %}class="{{ message.tags }}" {% endif %}>
+      {{ message }}
+    </div>
+
+    {% endfor %}
     <div class="row">
       <div class="col-lg-7 mx-auto text-center">
         <ul class="hero-ul">

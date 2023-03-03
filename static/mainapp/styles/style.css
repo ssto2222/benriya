@@ -84,6 +84,11 @@ button.navbar-toggler.collapsed {
   position: relative;
 }
 
+
+.btn-info {
+  color: #fff;
+}
+
 .basket-btn #basket-qty {
   color: #fff;
   background: #d42114;
@@ -380,9 +385,7 @@ nav .inner ul li a.nav-link:hover {
   border-radius: 3px;
 }
 
-.btn a {
-  color: white;
-}
+
 
 /* .navbar-toggler {
   border-color: white;
@@ -520,7 +523,7 @@ section {
   transform: scale(1.1);
 }
 
-img {
+.projecg img {
   width: 100%;
 }
 
@@ -578,6 +581,14 @@ a.custom-btn {
   color: #212529;
   border-radius: 0.5rem;
 }
+
+.btn-custom {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: #fff;
+}
+
+
 
 
 .bg--orange,
@@ -758,7 +769,128 @@ span .small {
 
 }
 
+.bg-image1 {
+  background-image: url("../lego-ge.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
 /* .row-eq-height {
   display: flex;
   flex-wrap: wrap;
 } */
+
+/* Pay section */
+
+/* .pay img {
+  width: 120px;
+  height: auto;
+
+}
+
+.pay img.google {
+  margin-top: 20px;
+  width: 125px;
+  height: auto; */
+
+/* } */
+
+
+/* .credit-card {
+  padding-top: 10px;
+
+} */
+
+/* .apple {
+
+  margin-top: 30px;
+} */
+
+
+
+
+.summary-item {
+  height: 350px;
+  width: 100%;
+}
+
+.summary-item img {
+  width: 125px;
+  height: 125px;
+  border-radius: 100%;
+}
+
+.service-item {
+  height: 250px;
+  width: 100%;
+}
+
+.service-item img {
+  width: 125px;
+  height: 125px;
+  border-radius: 100%;
+}
+
+.pay.card-effect {
+  display: block;
+  max-width: 250px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+
+
+button.pay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  margin: auto;
+  border: none;
+  background-color: #fff;
+  height: 200px;
+  width: 220px;
+}
+
+.pay-img {
+  position: relative;
+}
+
+.pay-img img.credit-card {
+  width: 120px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  left: 30px;
+}
+
+.pay-img img.apple {
+  width: 120px;
+  height: auto;
+  position: absolute;
+  top: 40px;
+  left: 0px;
+}
+
+.pay-img img.google {
+  width: 128px;
+  height: auto;
+  position: absolute;
+  top: 40px;
+  left: 0px;
+}
+
+.pay-img img.paypay {
+  width: 130px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  left: -16px;
+}
+
+button.pay h3 {
+  margin: 0;
+  font-size: 18px;
+  text-align: center;
+}

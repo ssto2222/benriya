@@ -1,28 +1,37 @@
 {% extends 'mainapp/base_index.html' %} {%block content%}{% load static %}
+<div class="page-top"></div>
 <div class="container">
+  {% for message in messages %}
+  <div {% if message.tags %}class="{{ message.tags }}" {% endif %}>
+    {{ message }}
+  </div>
+
+  {% endfor %}
+
   <h1 class="page-title">アカウントページ</h1>
 
 
-  <form class="row g-3 pt-4" method="POST">
+  <form class="row g-3 pt-4" method="POST" action="{%url 'mainapp:account'%}">
     {% csrf_token %}
     <div class="col-md-8 col-sm-12">
       <label class="form-label">ユーザー名</label>
       <input type="text" class="form-control" id="id_username" name="username" placeholder="ユーザ名"
-        value="{{ user.profile.username}}">
+        value="{{ profile.username }}">
     </div>
 
     <div class="col-md-6">
-      <label class="form-label">郵便番号</label>
-      <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ user.profile.zipcode}}">
+      <label class="form-label">郵便番号(住所が自動入力されます。）</label>
+      <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ profile.zipcode}}">
     </div>
-    <div class="col-md-3 d-grid pt-3">
-      <button class="btn btn-info" id="search" type="button">住所検索</button>
+    <div class="col-md-3 d-grid ">
+      <label class="form-label">住所→郵便番号</label>
+      <button class="btn btn-custom" id="search" type="button">郵便番号検索</button>
       <p id="error"></p>
     </div>
     <div class="col-md-3">
       <label class="form-label">都道府県</label>
-      <input type="hidden" id="address1" name="address1" value="{{user.address1}}" placeholder="例）大阪府">
-      <select class="form-control" name="pref_name" id="pref_name">
+      <input type="hidden" id="address1" name="address1" value="{{ profile.prefecture}}" placeholder="例）大阪府">
+      <select class="form-control" name="prefecture" id="pref_name">
         <option value="" selected>選択してください</option>
         <option value="北海道">北海道</option>
         <option value="青森県">青森県</option>
@@ -75,25 +84,36 @@
     </div>
     <div class="col-md-6">
       <label class="form-label">市区町村</label>
-      <input type="text" class="form-control" id="address2" name="address2" value="{{ user.profile.city}}">
+      <input type="text" class="form-control" id="address2" name="city" value="{{ profile.city}}">
     </div>
 
     <div class="col-12">
       <label class="form-label">町域</label>
-      <input type="text" class="form-control" id="address3" name="address3" placeholder=""
-        value="{{ user.profile.address1}}">
+      <input type="text" class="form-control" id="address3" name="address1" placeholder=""
+        value="{{ profile.address1}}">
     </div>
     <div class="col-12">
       <label class="form-label">建物名等</label>
-      <input type="text" class="form-control" id="address4" name="address4" placeholder=""
-        value="{{ user.profile.address2}}">
+      <input type="text" class="form-control" id="address4" name="address2" placeholder=""
+        value="{{ profile.address2}}">
     </div>
 
     <div class="col-md-12 d-grid">
-      <button type="submit" class="btn btn-info">保存</button>
+      <button type="submit" class="btn btn-info btn-block fw-bold w-100">保存</button>
     </div>
     <hr />
   </form>
+  <p class="pt-4 font-weight-bold">退会する</p>
+
+
+  <p>アカウントを削除しますがよろしいですか？</p>
+  <div class="col-md-3 d-grid">
+    <a type="button" role="button" class="btn btn-danger btn-block  mb-4 fw-bold w-100"
+      href="{%url 'mainapp:delete_user'%}">退会する</a>
+  </div>
+
+
+
 
 
 

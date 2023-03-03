@@ -17,7 +17,8 @@ def category_list(req, category_slug):
 
 def product_all(req):
     products = Product.objects.all()
-    context = {'products': products}
+    categories = Category.objects.all()
+    context = {'products': products,'categories':categories}
     return render(req, 'store/home.html', context)
 
 def product_single(req,slug):

@@ -28,7 +28,7 @@
                     <a class="nav-link" href="/quotation">見積もり</a>
                     <a class="nav-link" href="{%url 'store:product_all' %}">Store</a>
                     {% if user.is_authenticated %}
-                    <a class="nav-link account" href="/account">
+                    <a class="nav-link account" href="{%url 'mainapp:dashboard' %}">
                         <span class="badge">ID:{{user.email}}</span>
                     </a>
                     <a type="button" role="button" href="{% url 'basket:basket_summary' %}"

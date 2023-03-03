@@ -1,22 +1,22 @@
 {% extends '../../mainapp/base_index.html' %}{% load static %}
-
+{% load humanize %}
 {% block content%}
 <div class="page-top"></div>
-<h1 class="page-title">買い物かご</h1>
-<div class="container mt-3">
 
+<div class="container mt-3" style="max-width: 1000px">
+    <h1 class="page-title">買い物かご</h1>
     {% for item in basket %}
     {% with product=item.product %}
     <div data-index={{product.id}} class="row mb-4 product-item">
-        <div class="team-member card-effect text-center">
+        <div class="summary-item card-effect text-center">
             <img src="{{product.image.url}}" alt="Responsice image" class="img-fluid">
             <h5 class="mt-2"><a href="{{ product.get_absolute_url }}"
                     class="text-dark text-decoration-none">{{product.title}}</a></h5>
             <div class="border">
                 <div class="col border-bottom">
                     <div class="row p-3">
-                        <div class="col-6 text-end">
-                            <span class="h6 fw-bold">¥{{product.price}}</span>
+                        <div class="col-12 text-enter">
+                            <span class="h6 fw-bold">¥{{product.price|intcomma}}</span>
                         </div>
                     </div>
                 </div>
@@ -47,14 +47,147 @@
     {% endfor %}
 
     <div class="col-12 text-end">
-        <div class="h6 fw-bold">お支払い額　合計：¥<div id="subtotal" class="d-inline-flex">{{basket.get_total_price}}</div>
+        <div class="h6 fw-bold">お支払い額　合計：¥<div id="subtotal" class="d-inline-flex">
+            </div><input type="hidden" id='id_subtotal' value="{{basket.get_total_price}}" />
         </div>
     </div>
+    <form action="{%url 'payment:create_stripe_payment' %}" method="post">
+        {% csrf_token %}
+        <div class=" row my-3 mx-2" id="paytypes">
+            <h4 class="mb-3">お支払い方法</h4>
+            <div>
+                <input type="radio" id="pay_type" name="paytype" value="default" checked>
+                <label for="prepay">通常支払い（20％前払い、サービス後残額支払い 現金可）</label>
+            </div>
+
+            <div>
+                <input type="radio" id="pay_type" name="paytype" value="pre">
+                <label for="prepay">一括前払い（30％割引）</label>
+            </div>
+        </div>
+
+        <div class="row button-container" id="pay_selection">
+            <div class="row  col-md-12">
+                <button type="submit" class="pay col-md-3 card-effect text-center">
+                    <h3>クレジットカード</h3>
+                    <div class="row ">
+                        <div class="pay-img col-md-12">
+                            <img class="credit-card" src="{% static 'payment/credit-card-regular-168.png'%}" alt="">
+                        </div>
+                    </div>
+                </button>
+
+
+                <button type="submit" class="pay col-md-3 card-effect text-center">
+
+                    <h3>Apple Pay</h3>
+
+                    <div class="row apple">
+                        <div class="pay-img col-md-12">
+                            <img class="apple" src="{% static 'payment/Apple_Pay.svg'%}" alt="apple_pay">
+                        </div>
+
+                    </div>
+
+                </button>
+
+
+                <button type="submit" class="pay col-md-3 card-effect text-center">
+
+                    <h3>Google Pay</h3>
+
+                    <div class="row apple">
+                        <div class="pay-img col-md-12">
+                            <img class="google" src="{% static 'payment/GPay_Acceptance_Mark_800.png'%}"
+                                alt="google_pay">
+                        </div>
+
+                    </div>
+
+                </button>
+
+
+
+                <button type="submit" class="pay col-md-3 card-effect text-center">
+
+                    <h3>PayPay</h3>
+
+                    <div class="row apple">
+                        <div class="pay-img col-md-12">
+                            <img class="paypay" src="{% static 'payment/img_logo_2.jpg'%}" alt="pay_pay">
+                        </div>
+
+                    </div>
+
+                </button>
+            </div>
+
+
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<hr class="my-4">
+
 
 
 </div>
 
+
+</div>
+
+
 <script>
+    let basketTotal = parseInt(document.getElementById('id_subtotal').value);
+    let pay_types = document.querySelectorAll('#pay_type');
+    window.onload = function () {
+
+        paySelectionDisplay();
+
+        console.log(typeof (subtotal))
+
+        if (subtotal != 0) {
+            pay_types.forEach((element) => {
+                PayType(element);
+
+                element.addEventListener('click', function () {
+                    PayType(element);
+                })
+
+
+            })
+        }
+
+
+    }
+    document.getElementById('id_subtotal').addEventListener('change', (e) => {
+        if (subtotal != 0) {
+            pay_types.forEach((element) => {
+                PayType(element);
+            })
+        }
+    })
+
+    function PayType(element) {
+        if (element.checked) {
+            if (element.value === 'default') {
+                document.getElementById('subtotal').textContent = (basketTotal * 0.2).toLocaleString() + "/" + basketTotal.toLocaleString()
+            } else if (element.value === 'pre') {
+                document.getElementById("subtotal").textContent = (basketTotal * 0.7).toLocaleString() + "(30%割引)"
+            }
+        }
+
+    }
+
+
+
+
     $(document).on('click', '.delete-button', function (e) {
         e.preventDefault();
         let prodid = $(this).data('index');
@@ -68,8 +201,9 @@
             },
             success: function (json) {
                 $('.product-item[data-index="' + prodid + '"]').remove();
-                document.getElementById("subtotal").innerHTML = json.subtotal
-                document.getElementById("basket-qty").innerHTML = json.qty
+                document.getElementById("subtotal").innerHTML = json.subtotal;
+                document.getElementById("basket-qty").innerHTML = json.qty;
+                paySelectionDisplay();
             },
             error: function (xhr, errmsg, err) { }
         });
@@ -94,12 +228,40 @@
                 console.log('update op succeeded')
                 document.getElementById('basket-qty').innerHTML = json.qty
                 document.getElementById('subtotal').innerHTML = json.subtotal
+                _showAlert(json.message, prodid)
             },
             error: function (xhr, errmsg, err) { }
         });
 
 
     })
+
+    function _showAlert(msg, prodid) {
+        var $alert = $('<div>').prependTo($('.product-item[data-index="' + prodid + '"]')).addClass('alert rounded-0 alert alert-success');
+
+        $alert.hide().text(msg).fadeIn(3000, function () {
+            $alert.fadeOut(3000, function () {
+                $alert.remove();
+
+            });
+        });
+
+    }
+
+    function paySelectionDisplay() {
+        let paySelection = document.getElementById('pay_selection');
+        let paytypes = document.getElementById('paytypes')
+
+        if (basketTotal === 0) {
+            document.getElementById('subtotal').textContent = '0';
+            paySelection.style.display = 'none';
+            paytypes.style.display = 'none';
+        } else {
+            paySelection.style.display = '';
+            paytypes.style.display = '';
+        }
+    }
+
 
 
 </script>

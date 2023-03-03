@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from django.http import JsonResponse
 from store.models import Product
 from .basket import Basket
+import json
 
 def basket_summary(req):
     context = {'basket':Basket(req)}
@@ -11,13 +12,21 @@ def basket_add(req):
     basket = Basket(req)
     if req.POST.get('action') == 'post':
         product_id = int(req.POST.get('productid'))
+      
         qty = int(req.POST.get('productqty'))
-        product = get_object_or_404(Product,id=product_id)
-        basket.add(product=product, qty=qty)
-        basketqty=basket.__len__()
-        context = {'qty':basketqty}
-        response = JsonResponse(context)
-        return response
+        product = Product.objects.get(id=product_id)
+        
+        is_added = basket.add(product=product, qty=qty)
+        if is_added:
+            msg = 'カートに商品を追加しました。'
+        else:
+            msg = '同じ商品がすでに追加されています。'
+       
+        context ={'qty':basket.__len__(), 
+                  'message':msg,
+                  'is_added':is_added}
+        # basketqty=basket.__len__()
+        return JsonResponse((context))
     
 def basket_delete(req):
     
@@ -38,6 +47,7 @@ def basket_update(req):
         qty = int(req.POST.get('productqty'))
         basket.update(product=product_id, qty=qty)
         context = {'qty':basket.__len__(),
-                   'subtotal':basket.get_total_price()
+                   'subtotal':basket.get_total_price(),
+                   'message':'製品の数量が変更されました。'
                 }
         return JsonResponse((context))

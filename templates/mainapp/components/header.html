@@ -19,7 +19,7 @@
 
                 <li class="nav-item ms-2">
                   <span class="badge rounded-pill text-light"><a class="p-2"
-                      href="/account">ID:{{user.email}}</a></span>
+                      href="{%url 'mainapp:dashboard' %}">ID:{{user.email}}</a></span>
                 </li>
 
                 <li class="nav-item" id="logout"><a class="nav-link dropdown-items" href="/logout">ログアウト</a></li>

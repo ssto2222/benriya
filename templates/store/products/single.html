@@ -1,8 +1,14 @@
 {% extends '../../mainapp/base_index.html' %}{% load static %}
-
+{% load humanize %}
 {% block content%}
 <div class="page-top"></div>
 <div class="container">
+    {% for message in messages %}
+    <div {% if message.tags %}class="{{ message.tags }}" {% endif %}>
+        {{ message }}
+    </div>
+
+    {% endfor %}
     <main class="pt-5">
         <div class="row g-3">
             <div class="col-md-5 col-lg-5 order-md-first bg-light">
@@ -22,13 +28,14 @@
                                 <a href="{% url 'store:product_all'%}">
                                     <<戻る </a>
                             </div>
-                            <div class="col-6 text-end"><span class="h4 fw-bold"></span>Unit{{product.price}}</div>
+                            <div class="col-6 text-end"><span class="h4 fw-bold"></span>¥{{product.price|intcomma}}
+                            </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="row p-3">
-                            <div class="col-6">
-                                <label for="select">Qty</label>
+                            <div class="col-4">
+                                <label for="select">数量</label>
                                 <select name="" id="select">
                                     <option value="">1</option>
                                     <option value="">2</option>
@@ -36,9 +43,15 @@
                                     <option value="">4</option>
                                 </select>
                             </div>
-                            <div class="col-6 text-end"><button type="button" id="add-button" value="{{product.id}}"
-                                    class="btn btn-secondary btn-sm">Add to
-                                    Cart</button></div>
+                            <div class="col-8">
+                                <label for="select">納期</label>
+                                <input type="date" class="deadline" id="date" name="date">
+                            </div>
+
+                        </div>
+                        <div class="row p-3">
+                            <div class="col-12 text-end"><button type="button" id="add-button" value="{{product.id}}"
+                                    class="btn btn-secondary btn-sm">買い物かごに入れる</button></div>
                         </div>
                     </div>
                 </div>
@@ -49,6 +62,24 @@
 </div>
 
 <script>
+    // 今日の日付を取得
+    let today = new Date();
+
+    // 2週間後の日付を計算
+    let twoWeeksLater = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+
+    // YYYY-MM-DD形式に変換
+    let yyyy = twoWeeksLater.getFullYear();
+    let mm = String(twoWeeksLater.getMonth() + 1).padStart(2, '0');
+    let dd = String(twoWeeksLater.getDate()).padStart(2, '0');
+    let dateString = `${yyyy}-${mm}-${dd}`;
+
+    // input要素のvalue属性に設定
+    document.getElementById('date').value = dateString;
+
+
+
+
     $(document).on('click', '#add-button', function (e) {
         e.preventDefault();
 
@@ -64,9 +95,24 @@
 
             success: function (json) {
                 document.getElementById('basket-qty').innerHTML = json.qty
+                _showAlert(json.message, json.is_added)
             },
-            error: function (xhr, errmsg, err) { }
+            error: function (xhr, errmsg, err) {
+
+            }
         });
     })
+
+    function _showAlert(msg, is_added) {
+        if (is_added) var $alert = $('<div>').prependTo($('.container')).addClass('alert rounded-0 alert alert-success');
+        else var $alert = $('<div>').prependTo($('.container')).addClass('alert rounded-0 alert alert-danger');
+        $alert.hide().text(msg).fadeIn(3000, function () {
+            $alert.fadeOut(3000, function () {
+                $alert.remove();
+
+            });
+        });
+
+    }
 </script>
 {%endblock%}

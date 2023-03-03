@@ -6,8 +6,9 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="{% url 'store:product_all' %}">全て</a></li>
-            <li><a class="dropdown-item" href="/store/search/room-clean">片付け・遺品整理</a></li>
-            <li><a class="dropdown-item" href="/store/search/equipment-fix">電化製品修理</a></li>
+            {% for category in categories %}
+            <li><a class="dropdown-item" href="/store/search/{{category.slug}}">{{category.name}}</a></li>
+            {% endfor %}
         </ul>
     </div>
 </nav>

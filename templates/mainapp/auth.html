@@ -2,6 +2,12 @@
 {% block content %}
 <div class="page-top"></div>
 <div class="container">
+  {% for message in messages %}
+  <div {% if message.tags %}class="{{ message.tags }}" {% endif %}>
+    {{ message }}
+  </div>
+
+  {% endfor %}
   <div class="row">
 
     <h1><a href="/" style="text-decoration:none">トゥットファーレ</a></h1>
@@ -54,8 +60,11 @@
   <div class="pt-3 row text-center">
     <div class="col-md-12 m">
       {% if 'login' in request.path %}
+      <ul>
+        <li><a href="/signup/" class="link-secondary">新規登録はこちら</a></li>
+        <li><a href="{% url 'mainapp:pwdreset' %}" class="link-secondary">パスワードを忘れましたか？</a></li>
+      </ul>
 
-      <a href="/signup/" class="link-secondary">新規登録はこちら</a>
 
       {% elif 'signup' in request.path %}
 

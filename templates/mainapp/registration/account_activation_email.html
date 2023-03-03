@@ -3,10 +3,10 @@
 サイトにログインするためには、アカウントをアクティベートする必要があります。
 以下のリンクをクリックして、アクティベートを完了してください。
 
-
 Thank you for registration!
 Your account has been successfully created.
 Please click below link to activate your account.
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+↓↓リンクはこちら（link is here)
+http://{{ domain }}{% url 'mainapp:activate' uidb64=uid token=token %}
 {% endautoescape %}

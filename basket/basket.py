@@ -1,6 +1,7 @@
 from store.models import Product
 
 
+
 class Basket():
     
     def __init__(self,request):
@@ -8,17 +9,20 @@ class Basket():
         self.session = request.session
         
         basket = self.session.get('skey')
+        print(basket)
         if 'skey' not in request.session:
             basket = self.session['skey'] = {}
         self.basket = basket
         
     def add(self,product,qty):
         product_id = product.id
-        
-        if product_id not in self.basket:
+        is_added = False
+        if str(product_id) not in self.basket.keys():
             self.basket[product_id] = {'price': str(product.price), 'qty':int(qty)}
-            
-        self.save()
+            self.save()
+            is_added = True
+        
+        return is_added
     
     def delete(self,product):
         product_id = str(product)
@@ -32,6 +36,10 @@ class Basket():
             self.basket[product_id]['qty'] = int(qty)
             
             self.save()
+    
+    def clear(self):
+        del self.session['skey']
+        self.save()
         
         
     def __iter__(self):

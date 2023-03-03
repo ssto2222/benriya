@@ -10,39 +10,40 @@
             <p><strong class="aster">&#10033</strong>印は必須項目です。</span></p>
 
             <div class="control-group col-md-12 pb-3">
-                <i class=" fa fa-user m-2"></i><label class="form-label" for="first-name">お名前 <strong
+                <i class=" fa fa-user mx-2"></i><label class="form-label" for="first-name">お名前 <strong
                         class="aster">&#10033</strong></label>
-                <input class="form-control ms-2" required type="text" name="name" id="customer-name"
+                <input class="form-control " required type="text" name="name" id="customer-name"
                     value="{{user.firstname}}" placeholder="トゥットファーレ">
             </div>
 
 
             <div class="control-group col-md-12 pb-3">
-                <i class="fa fa-envelope-o m-2"></i><label class="form-label" for="email">Email <strong
+                <i class="fa fa-envelope-o mx-2"></i><label class="form-label" for="email">Email <strong
                         class="aster">&#10033</strong></label>
-                <input required class="form-control ms-2" type="text" name="email" id="email" value="{{user.email}}"
+                <input required class="form-control" type="text" name="email" id="email" value="{{user.email}}"
                     placeholder="例）totofare@xxxx.com">
             </div>
 
 
             <div class="control-group col-md-12 pb-3">
 
-                <i class="fa fa-phone m-2"></i><label for="tel" class="form-label">ご連絡先 <strong
+                <i class="fa fa-phone mx-2"></i><label for="tel" class="form-label">ご連絡先 <strong
                         class="aster">&#10033</strong></label>
-                <input required class="form-control ms-2" type="text" name="tel" id="tel" value="{{user.tel}}"
+                <input required class="form-control " type="text" name="tel" id="tel" value="{{user.tel}}"
                     placeholder="例）090xxxxxxxx">
 
             </div>
 
             <div class="control-group col-md-12 pb-3">
 
-                <i class="fa fa-address-card m-2"></i><label for="zipcode" class="form-label">郵便番号 <strong
-                        class="aster">&#10033</strong></label>
+                <i class="fa fa-address-card mx-2"></i><label for="zipcode" class="form-label">郵便番号(住所が自動入力されます。)
+                    <strong class="aster">&#10033</strong></label>
                 <input class="form-control ms-2" required type="text" id="zipcode" name="zipcode"
                     value="{{user.zipcode}}" placeholder="例）1234567">
 
-                <div class="col-md-6 d-grid mt-3">
-                    <button class="btn btn-info" id="search" type="button">住所検索</button>
+                <div class="col-md-6 d-grid ">
+                    <label for="search" class="form-label mt-2">住所→郵便番号</label>
+                    <button class="btn btn-info" id="search" type="button">郵便番号検索</button>
                     <p id="error"></p>
                 </div>
             </div>

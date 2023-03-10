@@ -100,16 +100,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tuttofare-app',
+#         'USER': 'ubuntu',
+#         'PASSWORD': os.environ['DATABASE_PASSWORD'],
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         }
+#     }
+
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tuttofare-app',
-        'USER': 'ubuntu',
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': 'localhost',
-        'PORT': '',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR + '/db.sqlite3',
     }
+}
 
 
 

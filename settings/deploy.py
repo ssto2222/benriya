@@ -28,7 +28,7 @@ ALLOWED_HOSTS = ['127.0.0.1','13.208.160.4']
 
 try:
     import yaml
-    with open(os.path.join(BASE_DIR,'secrets','secret.yaml')) as f:
+    with open(os.path.join('/etc','secrets','secret.yaml')) as f:
         objs = yaml.safe_load(f)
         for obj in objs['env_variables']:
             os.environ[obj] = objs['env_variables'][obj]

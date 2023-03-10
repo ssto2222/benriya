@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NUMBER_GROUPING = 3
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = "AWS" not in os.environ
 
 ALLOWED_HOSTS = ['127.0.0.1','13.208.160.4']
 
@@ -100,24 +100,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tuttofare-app',
-#         'USER': 'ubuntu',
-#         'PASSWORD': os.environ['DATABASE_PASSWORD'],
-#         'HOST': 'localhost',
-#         'PORT': '',
-#         }
-#     }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/db.sqlite3',
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tuttofare-app',
+        'USER': 'ubuntu',
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': 'localhost',
+        'PORT': '',
+        }
     }
-}
-
 
 
 
@@ -159,7 +151,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = '/usr/share/nginx/html/static'
+STATIC_ROOT = '/usr/share/nginx/html/static'
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR,'static')
 ]

@@ -3,7 +3,9 @@ import os
 AUTH_USER_MODEL='mainapp.User'
 NUMBER_GROUPING = 3
 
-from settings.deploy import *
+if 'AWS' in os.environ:
+    from settings.deploy import *
+from settings.local import *
 
 
 

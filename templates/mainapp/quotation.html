@@ -1,11 +1,15 @@
 {% extends 'mainapp/base_index.html' %} {% block content %}{% load static %}
 <div class="page-top"></div>
 
-<div class="container ">
-    <h1 class="page-title">見積り入力ページ</h1>
+<div class="container" style=" max-width: 1000px">
+    <div class="quotation-title">
+        <h1 class="page-top-title pt-3 ps-5">見積り入力ページ</h1>
+        <p class="px-5 text-white">各種サービスの見積もりをすぐにすることができます。</p>
+    </div>
+
     <form method="post" name="myform" id="form" class="row g-3 ">
         {% csrf_token %}
-        <div class="col-md-6 col-sm-12 px-5">
+        <div class="col-md-6 col-sm-12 px-5 py-3">
             <h2>基本情報 <span class="warning"></h2>
             <p><strong class="aster">&#10033</strong>印は必須項目です。</span></p>
 
@@ -148,7 +152,7 @@
 
         </div>
 
-        <div class="col-md-6 col-sm-12 px-5">
+        <div class="col-md-6 col-sm-12 px-5 py-3">
 
             <h2>お見積もり情報</h2>
             <p><strong class="aster">&#10033</strong>印は必須項目です。</span></p>

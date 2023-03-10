@@ -4,7 +4,11 @@
 <div class="page-top"></div>
 
 <div class="container mt-3" style="max-width: 1000px">
-    <h1 class="page-title">買い物かご</h1>
+    <div class="basket-title">
+        <h1 class="page-top-title ps-5 pt-3">買い物かご</h1>
+        <p class="px-5 text-white">中身をご確認ください。</p>
+    </div>
+
     {% for item in basket %}
     {% with product=item.product %}
     <div data-index={{product.id}} class="row mb-4 product-item">

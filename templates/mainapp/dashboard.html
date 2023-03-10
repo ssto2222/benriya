@@ -2,12 +2,17 @@
 
 <div class="page-top"></div>
 <div class="container" style="max-width: 1000px">
-    <div class="col-12">
-        <h1 class="page-title">ダッシュボード</h1>
+    <div class="flex align-items-center dashboard-title my-3 py-3">
+        <h1 class="page-top-title">ダッシュボード</h1>
+        <div class="px-5 text-white"><b>注文の管理</b> と<b>アカウント情報</b>の管理に利用してください。</div>
+
     </div>
-    <div class="col-12 d-flex justify-content-between">
-        <div><b>注文の管理</b> と<b>アカウント情報</b>の管理に利用してください。</div>
-        <div><a type='button' href="{% url  'mainapp:account' %}">アカウント情報</a></div>
+    <div class="col-12 ">
+        <a type='button' class="btn btn-dashboard" href="{% url  'mainapp:account' %}">
+            <i class='bx bxs-user-account iconarea'></i>
+            <span class="ms-5">アカウント情報</span>
+        </a>
+
     </div>
     <hr />
 </div>

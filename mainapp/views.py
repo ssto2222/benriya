@@ -91,9 +91,14 @@ class Login(LoginView):
 
 @login_required
 def dashboard(request):
-    orders = user_orders(request)
+    context={}
+    try:
+        orders = user_orders(request)
+        context['orders']=orders
+    except:
+        print('no orders')
+    
    
-    context={'orders':orders}
     return render(request,'mainapp/dashboard.html',context)
 
 @login_required

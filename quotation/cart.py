@@ -1,0 +1,70 @@
+from store.models import Product
+
+
+
+class Cart():
+    
+    def __init__(self,request):
+        
+        self.session = request.session
+        
+        cart = self.session.get('skey')
+        print(cart)
+        if 'skey' not in request.session:
+            cart = self.session['skey'] = {}
+        self.cart = cart
+        
+    def add(self,product,qty):
+        product_id = product.id
+        is_added = False
+        if str(product_id) not in self.cart.keys():
+            self.cart[product_id] = {'price': str(product.price), 'qty':int(qty)}
+            self.save()
+            is_added = True
+        
+        return is_added
+    
+    def delete(self,product):
+        product_id = str(product)
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+            
+    def update(self,product,qty):
+        product_id = str(product)
+        if product_id in self.cart:
+            self.cart[product_id]['qty'] = int(qty)
+            
+            self.save()
+    
+    def clear(self):
+        del self.session['skey']
+        self.save()
+        
+        
+    def __iter__(self):
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        cart = self.cart.copy()
+        for product in products:
+            cart[str(product.id)]['product'] = product
+        
+        for item in cart.values():
+            item['price'] = int(item['price'])
+            item['qty'] =  int(item['qty'])
+            item['total_price'] = item['price'] * item['qty']
+            yield item
+        
+        
+    def __len__(self):
+        """
+        Get the basket data and count the qty of items
+        """
+        
+        return sum(item["qty"] for item in self.cart.values())
+    
+    def get_total_price(self):
+        return sum(int(item["qty"]) * int(item['price']) for item in self.cart.values())
+    
+    def save(self):
+        self.session.modified = True
